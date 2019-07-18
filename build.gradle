@@ -1,0 +1,32 @@
+apply plugin: 'java-gradle-plugin'
+apply plugin: 'eclipse'
+apply plugin: 'maven-publish'
+
+compileJava   {
+  sourceCompatibility = '1.8'
+  targetCompatibility = '1.8'
+}
+
+gradlePlugin {
+  plugins {
+    simplePlugin {
+      id = 'arena.sei.greeting'
+      implementationClass = 'arena.sei.gradle.greeting.GreetingPlugin'
+    }
+  }
+}
+
+group = 'arena.sei.gradle'
+version = '0.0.1'
+
+publishing {
+  publications {
+    pluginPublication(MavenPublication) {
+      from components.java
+      groupId project.group
+      artifactId 'plugin'
+      version project.version
+    }
+  }
+}
+
