@@ -1,4 +1,4 @@
-package arena.sei.gradle.greeting;
+package arena.sei.gradle;
 
 public class GreetingPluginExtension {
 

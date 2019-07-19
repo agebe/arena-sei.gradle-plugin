@@ -9,18 +9,9 @@ compileJava   {
 
 gradlePlugin {
   plugins {
-    simplePlugin {
-      id = 'arena.sei.greeting'
-      implementationClass = 'arena.sei.gradle.greeting.GreetingPlugin'
-    }
-  }
-}
-
-gradlePlugin {
-  plugins {
-    addFrontendPlugin {
-      id = 'arena.sei.add-frontend'
-      implementationClass = 'arena.sei.gradle.frontend.AddFrontendPlugin'
+    seitools {
+      id = 'arena.sei.tools'
+      implementationClass = 'arena.sei.gradle.SeiToolsPlugin'
     }
   }
 }
