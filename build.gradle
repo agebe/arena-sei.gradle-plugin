@@ -16,6 +16,15 @@ gradlePlugin {
   }
 }
 
+gradlePlugin {
+  plugins {
+    addFrontendPlugin {
+      id = 'arena.sei.add-frontend'
+      implementationClass = 'arena.sei.gradle.frontend.AddFrontendPlugin'
+    }
+  }
+}
+
 group = 'arena.sei.gradle'
 version = '0.0.1'
 
