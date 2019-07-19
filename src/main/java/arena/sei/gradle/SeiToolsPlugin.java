@@ -10,11 +10,12 @@ public class SeiToolsPlugin implements Plugin<Project> {
 
   @Override
   public void apply(Project project) {
+    AddFrontendExtension addFrontendExtension = project.getExtensions().create("frontend", AddFrontendExtension.class);
     Task task = project.task("addFrontend");
     task.setDescription("add the static frontend to the backend war file");
     task.setGroup(SEI_TOOLS);
     task.dependsOn("war");
-    task.doLast(new AddFrontendAction(project));
+    task.doLast(new AddFrontendAction(project, addFrontendExtension));
 
     GreetingPluginExtension extension = project.getExtensions().create("greeting", GreetingPluginExtension.class);
     Task greeting = project.task("greet");

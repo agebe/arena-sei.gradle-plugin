@@ -22,9 +22,12 @@ public class AddFrontendAction implements Action<Task> {
 
   private Project project;
 
-  public AddFrontendAction(Project project) {
+  private AddFrontendExtension addFrontendExtension;
+
+  public AddFrontendAction(Project project, AddFrontendExtension addFrontendExtension) {
     super();
     this.project = project;
+    this.addFrontendExtension = addFrontendExtension;
   }
 
   private List<File> listRecursive(File dir, List<File> l) {
@@ -45,6 +48,37 @@ public class AddFrontendAction implements Action<Task> {
     return listRecursive(dir, new ArrayList<>());
   }
 
+  private File frontendBuild() {
+    File f;
+    if(addFrontendExtension.getFrontendBuild() != null) {
+      f = new File(addFrontendExtension.getFrontendBuild());
+      if(f.exists() && f.isDirectory()) {
+        return f;
+      } else {
+        throw new RuntimeException("not directory " + f.getAbsolutePath());
+      }
+    } else {
+      File home = new File(System.getProperty("user.home"));
+      f = new File(home, "arena-sei.dashboard/build");
+      if(f.exists() && f.isDirectory()) {
+        return f;
+      } else {
+        throw new RuntimeException("failed to locate frontend build directory,"
+            + " please specify in build.gradle (frontend.frontendBuild)");
+      }
+    }
+  }
+
+  private File warFile() {
+    // TODO figure out how to this from the war plugin configuration
+    // for now just make it an extra option
+    if(addFrontendExtension.getBackendWar() != null) {
+      return project.file(addFrontendExtension.getBackendWar());
+    } else {
+      return new File(project.getBuildDir(), "libs/arena-sei.dashboard-server.war");
+    }
+  }
+
   @Override
   public void execute(Task task) {
     //  File bdir = project.getBuildDir();
@@ -53,12 +87,8 @@ public class AddFrontendAction implements Action<Task> {
     //    Object v = project.getProperties().get(k);
     //    System.out.println(String.format("%s -> %s", k, v));
     //  });
-    // TODO figure out how to this from the war plugin configuration
-    // for now just make it an extra option
-    File fWar = new File(project.getBuildDir(), "libs/arena-sei.dashboard-server.war");
-    // TODO make this configurable
-    // look in user home first, sibling directory next then give up
-    File fromDirectory = new File("/home/uqageber/arena-sei.dashboard/build");
+    File fWar = warFile();
+    File fromDirectory = frontendBuild();
     List<File> toCopy = listRecursive(fromDirectory);
     // from https://stackoverflow.com/a/17504151
     Map<String, String> env = new HashMap<>(); 
