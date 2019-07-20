@@ -20,6 +20,15 @@ group = 'arena.sei.gradle'
 version = '0.0.1'
 
 publishing {
+  repositories {
+    maven {
+      // copied from https://docs.gradle.org/current/userguide/publishing_maven.html#publishing_maven:repositories
+      def baseUrl = "../arena-sei.maven-repo"
+      def releasesRepoUrl = "$baseUrl/releases"
+      def snapshotsRepoUrl = "$baseUrl/snapshots"
+      url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+    }
+  }
   publications {
     pluginPublication(MavenPublication) {
       from components.java
