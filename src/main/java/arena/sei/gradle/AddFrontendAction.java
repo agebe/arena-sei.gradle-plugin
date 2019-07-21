@@ -70,12 +70,15 @@ public class AddFrontendAction implements Action<Task> {
   }
 
   private File warFile() {
-    // TODO figure out how to this from the war plugin configuration
-    // for now just make it an extra option
     if(addFrontendExtension.getBackendWar() != null) {
       return project.file(addFrontendExtension.getBackendWar());
     } else {
-      return new File(project.getBuildDir(), "libs/arena-sei.dashboard-server.war");
+      Task war = project.getTasks().getByName("war");
+      if(war == null) {
+        throw new RuntimeException("war task not found");
+      }
+      return war.getOutputs().getFiles().getSingleFile();
+//      return new File(project.getBuildDir(), "libs/arena-sei.dashboard-server.war");
     }
   }
 
@@ -83,10 +86,16 @@ public class AddFrontendAction implements Action<Task> {
   public void execute(Task task) {
     //  File bdir = project.getBuildDir();
     //  System.out.println("build dir is: " + bdir.getAbsolutePath());
-    //  project.getProperties().keySet().stream().sorted().forEachOrdered(k -> {
-    //    Object v = project.getProperties().get(k);
-    //    System.out.println(String.format("%s -> %s", k, v));
-    //  });
+//    project.getProperties().keySet().stream().sorted().forEachOrdered(k -> {
+//      Object v = project.getProperties().get(k);
+//      System.out.println(String.format("%s -> %s", k, v));
+//    });
+//    Task war = (Task)project.getProperties().get("war");
+//    System.out.println(war.property("archiveFile"));
+//    System.out.println(project.file(war.property("archiveFile")));
+//    System.out.println(project.getTasks().getByName("war").property("archiveName"));
+//    System.out.println(project.getTasks().getByName("war").property("archiveFile"));
+//    System.out.println(war.getOutputs().getFiles().getSingleFile());
     File fWar = warFile();
     File fromDirectory = frontendBuild();
     List<File> toCopy = listRecursive(fromDirectory);
