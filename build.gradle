@@ -2,6 +2,10 @@ apply plugin: 'java-gradle-plugin'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
+repositories {
+  jcenter()
+}
+
 compileJava   {
   sourceCompatibility = '1.8'
   targetCompatibility = '1.8'
@@ -39,3 +43,6 @@ publishing {
   }
 }
 
+dependencies {
+  compile 'commons-io:commons-io:2.6'
+}
